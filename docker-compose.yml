@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  phalcon:
+    container_name: phalcon
+    build: ./
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./php/www:/var/www/html
+    network_mode: host
+ 
+  mongodb:
+    container_name: mongo
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+    network_mode: host
+  
+  mysql:
+    container_name: mysql
+    image: mysql:5.7 
+    ports:
+     - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql:/app/backup/
+    links:
+      - phalcon
+
+
+
+volumes:
+  mongodb:
+  mysql:
